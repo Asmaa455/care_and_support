@@ -14,13 +14,13 @@ return new class extends Migration
         Schema::create('medical__consultations', function (Blueprint $table) {
             $table->id();
             $table->foreignId('patient_id')->references('id')->on('patients');
-            $table->foreignId('doctor_id')->references('id')->on('doctors');
+            $table->foreignId('doctor_id')->nullable()->references('id')->on('doctors');
             $table->text('consultation_text');
-            $table->string('status');
-            $table->text('answer_text');
+            $table->boolean('status')->default(false);
+            $table->text('answer_text')->default('null');
             $table->timestamps();
         });
-    }
+    }///////////       
 
     /**
      * Reverse the migrations.

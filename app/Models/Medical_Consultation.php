@@ -10,7 +10,8 @@ class Medical_Consultation extends Model
 
 
 
-    protected $guarded=[];
+    protected $fillable = ['patient_id', 'consultation_text','doctor_id','answer_text','status'];
+        protected $guarded=[];
     public function patient(): BelongsTo
     {
         return $this->belongsTo(Patient::class);

@@ -3,8 +3,15 @@
 
 @if($medical_consultation->count() > 0)
     @foreach ($medical_consultation as $item)
+        {{$item->patient->user->first_name}}<br>
+        {{ $item->created_at }}<br>
         {{ $item->consultation_text }}<br>
-        {{ $item->status }}<br><br>   
+        @if ($item->status==0)
+        <pre> لم تتم الإجابة بعد </pre>
+        @else
+            {{$item->doctor->user->first_name}}<br>
+            {{$item->answer_text}}<br><br><br>
+        @endif
     @endforeach
 @else
     <p>لا توجد استشارات بعد</p>
