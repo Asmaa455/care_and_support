@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('healthy_values', function (Blueprint $table) {
+        Schema::create('healthy__values', function (Blueprint $table) {
             $table->id();
             $table->foreignId('patient_id')->references('id')->on('patients');
             $table->foreignId('disease_id')->references('id')->on('diseases');
@@ -26,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('healthy_values');
+        Schema::dropIfExists('healthy__values');
     }
 };

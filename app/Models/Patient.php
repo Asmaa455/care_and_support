@@ -5,9 +5,6 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-
-
 
 class Patient extends Model
 {
@@ -31,8 +28,8 @@ class Patient extends Model
         return $this->hasMany(Medication_Time::class);
     }
 
-    public function diseases(): BelongsToMany
+    public function healthy__values(): HasMany
     {
-        return $this->belongsToMany(Disease::class);
+        return $this->hasMany(Healthy_Value::class);
     }
 }

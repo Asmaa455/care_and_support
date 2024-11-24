@@ -5,16 +5,15 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class Medical_Consultation extends Model
+class Healthy_Value extends Model
 {
     public function patient(): BelongsTo
     {
         return $this->belongsTo(Patient::class);
     }
 
-    public function doctor(): BelongsTo
+    public function disease(): BelongsTo
     {
-        return $this->belongsTo(Doctor::class);
+        return $this->belongsTo(Disease::class);
     }
-
 }
