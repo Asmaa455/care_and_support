@@ -38,8 +38,7 @@ class Medical_ConsultationController extends Controller
             'consultations' => $Medical_Consultation,
             'doctor_id' => $id,
         ]);
-        /*return view('Medical_Consultation_doctor.Doctor_s_Answers',
-        compact('Medical_Consultation','id'));*/
+
     }
 
 
@@ -58,7 +57,7 @@ class Medical_ConsultationController extends Controller
                 'message' => 'Answer stored successfully',
                 'consultation' => $Medical_Consultation,
             ]);
-        
+         
     }
 
 
@@ -70,8 +69,7 @@ class Medical_ConsultationController extends Controller
             'consultations' => $medical_consultation,
             'patient_id' => $id,
         ]);
-        /*return view('Medical_Consultation_patient.View_Medical_Consultation',
-        compact('medical_consultation','id'));*/
+
     }
 
 
@@ -86,7 +84,7 @@ class Medical_ConsultationController extends Controller
             'message' => 'Medical consultation created successfully',
             'consultation' => $medical_consultation
         ]);
-        /*return redirect()->route('Medical_Consultation.patient_consultation', $id);*/
+
     }
     
 }

@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Medical_ConsultationController;
 use App\Http\Controllers\Patient_AidController;
 use App\Http\Controllers\Medication_TimeController;
+use App\Http\Controllers\Healthy_ValueController;
 Route::get('/user', function (Request $request) {
     return $request->user();
 })->middleware('auth:api');
@@ -38,3 +39,13 @@ Route::controller(Medication_TimeController::class)->group(function () {
     Route::get('Medication_Time/status/{id}','status');
 
 });
+
+
+Route::controller(Healthy_ValueController::class)->group(function () {
+
+    Route::Post('Healthy_Value/store_value/{id}/{idd}','store_value');
+    Route::get('Healthy_Value/show_value/{id}/{idd}','show_value');
+    Route::get('Healthy_Value/delete_value/{id}','delete_value');
+    
+});
+
