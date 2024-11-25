@@ -14,12 +14,12 @@ return new class extends Migration
         Schema::create('patient__aids', function (Blueprint $table) {
             $table->id();
             $table->foreignId('patient_id')->references('id')->on('patients');
-            $table->foreignId('volunteer_id')->references('id')->on('volunteers');
+            $table->foreignId('volunteer_id')->nullable()->references('id')->on('volunteers');
             $table->text('aid_type');
             $table->date('aid_date');
             $table->text('location');
             $table->text('additional_details');
-            $table->string('status');
+            $table->boolean('status')->default(false);
             $table->timestamps();
         });
     }

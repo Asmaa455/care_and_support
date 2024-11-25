@@ -20,7 +20,7 @@ return new class extends Migration
             $table->integer('daily_repetition');
             $table->date('start_date');
             $table->integer('duration_of_taking_the_drug');
-            $table->string('status');
+            $table->integer('status')->default(0);
             $table->timestamps();
         });
     }

@@ -3,6 +3,8 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Medical_ConsultationController;
+use App\Http\Controllers\Patient_AidController;
+use App\Http\Controllers\Medication_TimeController;
 Route::get('/user', function (Request $request) {
     return $request->user();
 })->middleware('auth:api');
@@ -15,4 +17,24 @@ Route::controller(Medical_ConsultationController::class)->group(function () {
     Route::Post('Medical_Consultation/doctor_answer_create/store/{id}/{idc}','store_answer');
     Route::get('Medical_Consultation/patient_consultation/{id}','patient_consultation');   
     Route::Post('Medical_Consultation/patient_consultation_store/{id}','store_Medical_Consultation');
+});
+
+
+Route::controller(Patient_AidController::class)->group(function () {
+
+    Route::get('Patient_Aid/Acceptable_Patient_Aid','Acceptable_Patient_Aid');
+    Route::get('Patient_Aid/Unacceptable_Patient_Aid/{id}','Unacceptable_Patient_Aid');
+    Route::get('Patient_Aid/Volunteer_Acceptance/{id}','Volunteer_Acceptance');
+    Route::get('Patient_Aid/Volunteer_acceptance_create/store/{id}/{ida}','store_acceptance');
+    Route::get('Patient_Aid/{id}','Patient_Aid');
+    Route::Post('Patient_Aid/Patient_Aid_store/{id}','Patient_Aid_store');
+});
+
+
+Route::controller(Medication_TimeController::class)->group(function () {
+
+    Route::Post('Medication_Time/store/{id}','store');
+    Route::get('Medication_Time/show/{id}','show');
+    Route::get('Medication_Time/status/{id}','status');
+
 });
