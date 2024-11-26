@@ -18,3 +18,11 @@ Route::controller(Medical_ConsultationController::class)->group(function () {
     Route::get('Medical_Consultation/patient_consultation_create/{id}','create_Medical_Consultation');
     Route::Post('Medical_Consultation/patient_consultation_store/{id}','store_Medical_Consultation');
 });
+
+
+
+
+Route::get('/csrf-token', function () {
+    return response()->json(['csrf_token' => csrf_token()]);
+});
+

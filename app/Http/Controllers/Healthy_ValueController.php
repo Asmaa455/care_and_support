@@ -26,7 +26,7 @@ class Healthy_ValueController extends Controller
         // الحصول على البيانات الصحية لمرض معين الخاصة بمريض معين
         $Healthy_Value=Healthy_Value::where('patient_id',$id)
         ->where('disease_id', $idd)->get();
-        return response()->json($Healthy_Value);
+        return response()->json($Healthy_Value); 
     }
 
     
