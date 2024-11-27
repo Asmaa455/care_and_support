@@ -2,6 +2,10 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Medical_ConsultationController;
+use App\Http\Controllers\Patient_AidController;
+use App\Http\Controllers\Medication_TimeController;
+use App\Http\Controllers\Healthy_ValueController;
+use App\Http\Controllers\DoctorController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -18,6 +22,43 @@ Route::controller(Medical_ConsultationController::class)->group(function () {
     Route::get('Medical_Consultation/patient_consultation_create/{id}','create_Medical_Consultation');
     Route::Post('Medical_Consultation/patient_consultation_store/{id}','store_Medical_Consultation');
 });
+
+
+Route::controller(Patient_AidController::class)->group(function () {
+
+    Route::get('Patient_Aid/Acceptable_Patient_Aid','Acceptable_Patient_Aid');
+    Route::get('Patient_Aid/Unacceptable_Patient_Aid/{id}','Unacceptable_Patient_Aid');
+    Route::get('Patient_Aid/Volunteer_Acceptance/{id}','Volunteer_Acceptance');
+    Route::get('Patient_Aid/Volunteer_acceptance_create/store/{id}/{ida}','store_acceptance');
+    Route::get('Patient_Aid/{id}','Patient_Aid');
+    Route::Post('Patient_Aid/Patient_Aid_store/{id}','Patient_Aid_store');
+});
+
+
+Route::controller(Medication_TimeController::class)->group(function () {
+
+    Route::Post('Medication_Time/store/{id}','store');
+    Route::get('Medication_Time/show/{id}','show');
+    Route::get('Medication_Time/status/{id}','status');
+
+});
+
+
+Route::controller(Healthy_ValueController::class)->group(function () {
+
+    Route::Post('Healthy_Value/store_value/{id}/{idd}','store_value');
+    Route::get('Healthy_Value/show_value/{id}/{idd}','show_value');
+    Route::get('Healthy_Value/delete_value/{id}','delete_value');
+    
+});
+
+Route::controller(DoctorController::class)->group(function () {
+
+    Route::get('Doctors_Directory/index','index');
+    Route::get('Doctors_Directory/search','search');
+    
+});
+
 
 
 

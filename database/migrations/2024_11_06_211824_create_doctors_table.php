@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('doctors', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->references('id')->on('users')->cascadeOnDelete();
-            $table->string('Specialization');
+            $table->string('specialization');
             $table->text('certificate photo');
             $table->integer('contact_information');
             $table->text('clinic_location');
