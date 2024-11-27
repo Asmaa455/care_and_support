@@ -54,3 +54,7 @@ Route::get('/csrf-token', function () {
     return response()->json(['csrf_token' => csrf_token()]);
 });
 
+Route::get('/test-session', function () {
+    session(['key' => 'value']);
+    return session('key');
+});

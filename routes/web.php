@@ -26,3 +26,9 @@ Route::get('/csrf-token', function () {
     return response()->json(['csrf_token' => csrf_token()]);
 });
 
+Route::get('/test-session', function () {
+    // تخزين قيمة في الجلسة
+    session(['test_key' => 'test_value']);
+    // استرجاع القيمة من الجلسة وعرضها
+    return session('test_key');
+});
