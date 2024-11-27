@@ -62,6 +62,13 @@ class Patient_AidController extends Controller
     public function Patient_Aid_store(Request $request,$id)
     {
         // تخزين طلبات المساعدة الجديدة
+        $request->validate([
+            'aid_type' => 'required|string',
+            'aid_date' => 'required|date',
+            'location' => 'required|string',
+            'additional_details' => 'nullable|string',
+        ]);
+
         $Patient_Aid = Patient_Aid::create([
             'patient_id' => $id,
             'aid_type' => $request->aid_type,
