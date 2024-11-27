@@ -6,6 +6,7 @@ use App\Http\Controllers\Patient_AidController;
 use App\Http\Controllers\Medication_TimeController;
 use App\Http\Controllers\Healthy_ValueController;
 use App\Http\Controllers\DoctorController;
+use App\Http\Controllers\Awareness_PostController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -56,6 +57,20 @@ Route::controller(DoctorController::class)->group(function () {
 
     Route::get('Doctors_Directory/index','index');
     Route::get('Doctors_Directory/search','search');
+    
+});
+
+
+Route::controller(Awareness_PostController::class)->group(function () {
+
+    Route::get('post','post');
+    Route::get('post/Doctor_s_post/{id}','Doctor_s_post');
+    Route::get('post/deleted_post/{id}','deleted_post');
+    Route::post('post/store_post/{id}','store_post');
+    Route::post('post/edit_post/{id}','edit_post');
+    Route::get('post/destroy/{id}','destroy');
+    Route::get('post/restore/{id}','restore');
+    Route::get('post/forcedelete/{id}','forcedelete');
     
 });
 

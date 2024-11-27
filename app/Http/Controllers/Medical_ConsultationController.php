@@ -57,7 +57,7 @@ class Medical_ConsultationController extends Controller
                 'message' => 'Answer stored successfully',
                 'consultation' => $Medical_Consultation,
             ]);
-         
+        
     }
 
 
