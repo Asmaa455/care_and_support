@@ -9,6 +9,14 @@ class Medication_TimeController extends Controller
     public function store(Request $request,$id)
     {
         // تخزين موعد دواء
+        $request->validate([
+            'medication_name' => 'required|string',
+            'amount' => 'required|numeric',
+            'time_of_taking_the_drug' => 'required|date_format:H:i',
+            'daily_repetition' => 'required|integer|min:1',
+            'start_date' => 'required|date',
+            'duration_of_taking_the_drug' => 'required|integer|min:1',
+        ]);
         $Medication_Time = Medication_Time::create([
             'patient_id' => $id,
             'medication_name' => $request->medication_name,

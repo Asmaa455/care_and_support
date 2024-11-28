@@ -18,7 +18,7 @@ return new class extends Migration
             $table->text('aid_type');
             $table->date('aid_date');
             $table->text('location');
-            $table->text('additional_details');
+            $table->text('additional_details')->nullable();
             $table->boolean('status')->default(false);
             $table->timestamps();
         });

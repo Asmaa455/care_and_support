@@ -18,6 +18,11 @@ class DoctorController extends Controller
     public function search(Request $request)
 {
     // بناء الاستعلام الأساسي للأطباء مع العلاقة المحملة
+    $request->validate([
+        'name' => 'sometimes|string',
+        'specialization' => 'sometimes|string',
+        'clinic_location' => 'sometimes|string',
+    ]);
     $query = Doctor::with('user');
 
     // البحث حسب الاسم من جدول المستخدمين
