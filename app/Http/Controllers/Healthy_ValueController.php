@@ -10,6 +10,9 @@ class Healthy_ValueController extends Controller
     public function store_value(Request $request,$id,$idd)
     {
         // تخزين قيمة جديدة
+        $request->validate([
+            'value' => 'required|numeric',
+        ]);
         $Healthy_Value = Healthy_Value::create([
             'patient_id' => $id,
             'disease_id' => $idd,

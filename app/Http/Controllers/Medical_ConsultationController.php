@@ -45,8 +45,9 @@ class Medical_ConsultationController extends Controller
     public function store_answer(Request $request,$id,$idc)
     {
         // تخزين الإجابة الجديدة
-
-
+        $request->validate([
+            'answer_text' => 'required|string',
+            ]);
         $Medical_Consultation = Medical_Consultation::findOrFail($idc);
         $Medical_Consultation->update([
             'doctor_id'=>$id,
@@ -64,7 +65,8 @@ class Medical_ConsultationController extends Controller
     public function patient_consultation($id)
     {
         // الحصول على الاستشارات الطبية للمريض
-        $medical_consultation=Medical_Consultation::with((['doctor.user','patient.user']))->where('patient_id',$id)->get();
+        $medical_consultation=Medical_Consultation::with((['doctor.user','patient.user']))
+        ->where('patient_id',$id)->get();
         return response()->json([
             'consultations' => $medical_consultation,
             'patient_id' => $id,
@@ -76,6 +78,9 @@ class Medical_ConsultationController extends Controller
     public function store_Medical_Consultation(Request $request,$id)
     {
         // تخزين الاستشارة الطبية الجديدة
+        $request->validate([
+            'consultation_text' => 'required|string',
+        ]);
         $medical_consultation = Medical_Consultation::create([
             'patient_id' => $id,
             'consultation_text' => $request->consultation_text,

@@ -30,6 +30,11 @@ class Awareness_PostController extends Controller
     public function store_post(Request $request,$id)
     {
         // تخزين منشور
+        $request->validate([
+            'category' => 'required|string',
+            'title' => 'required|string',
+            'content' => 'required|string',
+        ]);
         $post = Awareness_Post::create([
             'doctor_id' => $id,
             'category' => $request->category,
@@ -45,6 +50,11 @@ class Awareness_PostController extends Controller
     public function edit_post(Request $request,$id)
     {
         //تعديل إجابة
+        $request->validate([
+            'category' => 'required|string',
+            'title' => 'required|string',
+            'content' => 'required|string',
+        ]);
         $post = Awareness_Post::findOrFail($id);
         $post->update([
             'category' => $request->category,
