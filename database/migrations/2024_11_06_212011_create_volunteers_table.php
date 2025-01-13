@@ -16,7 +16,6 @@ return new class extends Migration
             $table->foreignId('user_id')->references('id')->on('users')->cascadeOnDelete();
             $table->integer('national_number');
             $table->integer('contact_information');
-            $table->text('profile_picture');
             $table->timestamps();
         });
     }

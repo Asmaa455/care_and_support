@@ -10,31 +10,34 @@ class Awareness_PostController extends Controller
     public function post()
     {
         // الحصول على المناشير
-        $post=Awareness_Post::get();
+        $post=Awareness_Post::with((['doctor.user']))
+        ->orderBy('created_at', 'desc')->get();
         return response()->json($post);
     }
 
     public function Doctor_s_post($id)
     {
         // الحصول على المناشير الخاصة بطبيب معين
-        $post=Awareness_Post::where('doctor_id',$id)->get();
+        $post=Awareness_Post::where('doctor_id',$id)
+        ->orderBy('created_at', 'desc')->get();
         return response()->json($post);
     }
     public function deleted_post($id)
     {
         //الحصول على المناشير المحذوفة الخاصة بطبيب معين
-        $post=Awareness_Post::where('doctor_id',$id)->onlyTrashed()->get();
+        $post=Awareness_Post::where('doctor_id',$id)
+        ->onlyTrashed()->orderBy('created_at', 'desc')->get();
         return response()->json($post);
     }
 
     public function store_post(Request $request,$id)
     {
         // تخزين منشور
-        $request->validate([
+        /*$request->validate([
             'category' => 'required|string',
             'title' => 'required|string',
             'content' => 'required|string',
-        ]);
+        ]);*/
         $post = Awareness_Post::create([
             'doctor_id' => $id,
             'category' => $request->category,
@@ -50,11 +53,11 @@ class Awareness_PostController extends Controller
     public function edit_post(Request $request,$id)
     {
         //تعديل إجابة
-        $request->validate([
+        /*$request->validate([
             'category' => 'required|string',
             'title' => 'required|string',
             'content' => 'required|string',
-        ]);
+        ]);*/
         $post = Awareness_Post::findOrFail($id);
         $post->update([
             'category' => $request->category,
@@ -72,7 +75,8 @@ class Awareness_PostController extends Controller
     public function destroy($id)
     {
         //حذف غير كامل
-    Awareness_Post::destroy($id);
+    //Awareness_Post::destroy($id);
+    Awareness_Post::findOrFail($id)->delete();
     return response()->json([
         'message' => 'post deleted successfully',
     ]);   

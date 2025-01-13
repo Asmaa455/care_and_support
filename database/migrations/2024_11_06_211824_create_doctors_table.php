@@ -18,7 +18,6 @@ return new class extends Migration
             $table->text('certificate photo');
             $table->integer('contact_information');
             $table->text('clinic_location');
-            $table->text('profile_picture');
             $table->timestamps();
         });
     }

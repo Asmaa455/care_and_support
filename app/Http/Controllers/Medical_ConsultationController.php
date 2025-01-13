@@ -14,7 +14,8 @@ class Medical_ConsultationController extends Controller
     public function Answered_Medical_Consultation()
     {
         // الحصول على الاستشارات الطبية التي تم الرد عليها
-        $Medical_Consultation=Medical_Consultation::where('status',true)->get();
+        $Medical_Consultation=Medical_Consultation::where('status',true)
+        ->orderBy('created_at', 'desc')->get();
         return response()->json($Medical_Consultation,200);
     }
 
@@ -22,7 +23,8 @@ class Medical_ConsultationController extends Controller
     public function Unanswered_Medical_Consultations(string $id)
     {
         // الحصول على الاستشارات الطبية التي لم يتم الرد عليها
-        $Medical_Consultation=Medical_Consultation::where('status',false)->get();
+        $Medical_Consultation=Medical_Consultation::where('status',false)
+        ->orderBy('created_at', 'desc')->get();
         return response()->json([
             'consultations' => $Medical_Consultation,
             'doctor_id' => $id,
@@ -33,7 +35,8 @@ class Medical_ConsultationController extends Controller
     public function Doctor_s_Answers(string $id)
     {
          // الحصول على إجابات الطبيب
-        $Medical_Consultation=Medical_Consultation::where('doctor_id',$id)->get();
+        $Medical_Consultation=Medical_Consultation::where('doctor_id',$id)
+        ->orderBy('created_at', 'desc')->get();
         return response()->json([
             'consultations' => $Medical_Consultation,
             'doctor_id' => $id,
@@ -66,7 +69,7 @@ class Medical_ConsultationController extends Controller
     {
         // الحصول على الاستشارات الطبية للمريض
         $medical_consultation=Medical_Consultation::with((['doctor.user','patient.user']))
-        ->where('patient_id',$id)->get();
+        ->where('patient_id',$id)->orderBy('created_at', 'desc')->get();
         return response()->json([
             'consultations' => $medical_consultation,
             'patient_id' => $id,

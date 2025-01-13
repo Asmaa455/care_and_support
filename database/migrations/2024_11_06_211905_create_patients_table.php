@@ -18,7 +18,6 @@ return new class extends Migration
             $table->string('gender');
             $table->text('diseases');
             $table->text('paper_to_prove_cancer');
-            $table->text('profile_picture');
             $table->timestamps();
         });
     }
