@@ -8,9 +8,19 @@ use App\Http\Controllers\Medication_TimeController;
 use App\Http\Controllers\Healthy_ValueController;
 use App\Http\Controllers\DoctorController;
 use App\Http\Controllers\Awareness_PostController;
+use App\Http\Controllers\UserController;
+
 Route::get('/user', function (Request $request) {
     return $request->user();
-})->middleware('auth:api');
+})->middleware('auth:sanctum');
+
+Route::controller(UserController::class)->group(function () {
+
+    Route::Post('register','register');
+    Route::Post('login','login');
+    Route::get('logout','logout')->middleware('auth:sanctum');
+
+});
 
 Route::controller(Medical_ConsultationController::class)->group(function () {
 

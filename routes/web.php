@@ -7,6 +7,7 @@ use App\Http\Controllers\Medication_TimeController;
 use App\Http\Controllers\Healthy_ValueController;
 use App\Http\Controllers\DoctorController;
 use App\Http\Controllers\Awareness_PostController;
+use App\Http\Controllers\UserController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -76,7 +77,13 @@ Route::controller(Awareness_PostController::class)->group(function () {
 
 
 
+Route::controller(UserController::class)->group(function () {
 
+    Route::Post('register','register');
+    Route::Post('login','login');
+    Route::get('logout','logout')->middleware('auth:sanctum');
+
+});
 
 Route::get('/csrf-token', function () {
     return response()->json(['csrf_token' => csrf_token()]);

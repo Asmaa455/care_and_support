@@ -16,7 +16,7 @@ return new class extends Migration
             $table->foreignId('patient_id')->references('id')->on('patients');
             $table->foreignId('disease_id')->references('id')->on('diseases');
             $table->integer('value');
-            $table->integer('value2')->default('null');
+            $table->integer('valuee');
             $table->string('status')->default('null');
             $table->timestamps();
         });

@@ -17,7 +17,7 @@ class Healthy_ValueController extends Controller
             'patient_id' => $id,
             'disease_id' => $idd,
             'value' => $request->value,
-            'value2' => $request->value2,
+            'valuee' => $request->valuee,
             'status' => $request->status,
         ]);
         return response()->json([
