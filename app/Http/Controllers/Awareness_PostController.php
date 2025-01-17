@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 use App\Models\Awareness_Post;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class Awareness_PostController extends Controller
 {
@@ -15,22 +16,24 @@ class Awareness_PostController extends Controller
         return response()->json($post);
     }
 
-    public function Doctor_s_post($id)
+    public function Doctor_s_post()
     {
         // الحصول على المناشير الخاصة بطبيب معين
-        $post=Awareness_Post::where('doctor_id',$id)
+        $doctor_id=Auth::user()->doctor->id;
+        $post=Awareness_Post::where('doctor_id',$doctor_id)
         ->orderBy('created_at', 'desc')->get();
         return response()->json($post);
     }
-    public function deleted_post($id)
+    public function deleted_post()
     {
         //الحصول على المناشير المحذوفة الخاصة بطبيب معين
-        $post=Awareness_Post::where('doctor_id',$id)
+        $doctor_id=Auth::user()->doctor->id;
+        $post=Awareness_Post::where('doctor_id',$doctor_id)
         ->onlyTrashed()->orderBy('created_at', 'desc')->get();
         return response()->json($post);
     }
 
-    public function store_post(Request $request,$id)
+    public function store_post(Request $request)
     {
         // تخزين منشور
         /*$request->validate([
@@ -38,8 +41,9 @@ class Awareness_PostController extends Controller
             'title' => 'required|string',
             'content' => 'required|string',
         ]);*/
+        $doctor_id=Auth::user()->doctor->id;
         $post = Awareness_Post::create([
-            'doctor_id' => $id,
+            'doctor_id' => $doctor_id,
             'category' => $request->category,
             'title' => $request->title,
             'content' => $request->content,
@@ -75,8 +79,7 @@ class Awareness_PostController extends Controller
     public function destroy($id)
     {
         //حذف غير كامل
-    //Awareness_Post::destroy($id);
-    Awareness_Post::findOrFail($id)->delete();
+    Awareness_Post::destroy($id);
     return response()->json([
         'message' => 'post deleted successfully',
     ]);   

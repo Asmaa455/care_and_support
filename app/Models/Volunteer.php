@@ -10,6 +10,10 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Volunteer extends Model
 {
+
+    protected $fillable = ['user_id','national_number', 'contact_information','image'];
+    protected $guarded=[];
+
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);

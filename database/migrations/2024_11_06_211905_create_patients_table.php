@@ -17,7 +17,8 @@ return new class extends Migration
             $table->integer('age');
             $table->string('gender');
             $table->text('diseases');
-            $table->text('paper_to_prove_cancer');
+            $table->text('paper_to_prove_cancer')->nullable();
+            $table->string('image')->nullable();
             $table->timestamps();
         });
     }

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Exception;
 use App\Models\Medical_Consultation;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use StripeStripe;
 use StripePaymentIntent;
 
@@ -20,40 +21,39 @@ class Medical_ConsultationController extends Controller
     }
 
 
-    public function Unanswered_Medical_Consultations(string $id)
+    public function Unanswered_Medical_Consultations()
     {
         // الحصول على الاستشارات الطبية التي لم يتم الرد عليها
         $Medical_Consultation=Medical_Consultation::where('status',false)
         ->orderBy('created_at', 'desc')->get();
         return response()->json([
             'consultations' => $Medical_Consultation,
-            'doctor_id' => $id,
         ]);
 
     }
 
-    public function Doctor_s_Answers(string $id)
+    public function Doctor_s_Answers()
     {
          // الحصول على إجابات الطبيب
-        $Medical_Consultation=Medical_Consultation::where('doctor_id',$id)
+        $doctor_id=Auth::user()->doctor->id;
+        $Medical_Consultation=Medical_Consultation::where('doctor_id',$doctor_id)
         ->orderBy('created_at', 'desc')->get();
         return response()->json([
             'consultations' => $Medical_Consultation,
-            'doctor_id' => $id,
         ]);
-
     }
 
 
-    public function store_answer(Request $request,$id,$idc)
+    public function store_answer(Request $request,$id)
     {
         // تخزين الإجابة الجديدة
         $request->validate([
             'answer_text' => 'required|string',
             ]);
-        $Medical_Consultation = Medical_Consultation::findOrFail($idc);
+        $doctor_id=Auth::user()->doctor->id;
+        $Medical_Consultation = Medical_Consultation::findOrFail($id);
         $Medical_Consultation->update([
-            'doctor_id'=>$id,
+            'doctor_id'=>$doctor_id,
             'answer_text'=>$request->answer_text,
             'status'=>1,
             ]);
@@ -65,27 +65,28 @@ class Medical_ConsultationController extends Controller
     }
 
 
-    public function patient_consultation($id)
+    public function patient_consultation()
     {
         // الحصول على الاستشارات الطبية للمريض
+        $patient_id=Auth::user()->patient->id;
         $medical_consultation=Medical_Consultation::with((['doctor.user','patient.user']))
-        ->where('patient_id',$id)->orderBy('created_at', 'desc')->get();
+        ->where('patient_id',$patient_id)->orderBy('created_at', 'desc')->get();
         return response()->json([
             'consultations' => $medical_consultation,
-            'patient_id' => $id,
         ]);
 
     }
 
 
-    public function store_Medical_Consultation(Request $request,$id)
+    public function store_Medical_Consultation(Request $request)
     {
         // تخزين الاستشارة الطبية الجديدة
         $request->validate([
             'consultation_text' => 'required|string',
         ]);
+        $patient_id=Auth::user()->patient->id;
         $medical_consultation = Medical_Consultation::create([
-            'patient_id' => $id,
+            'patient_id' => $patient_id,
             'consultation_text' => $request->consultation_text,
         ]);
         return response()->json([

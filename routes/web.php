@@ -1,6 +1,8 @@
 <?php
 
+use App\Mail\TestMail;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Mail;
 use App\Http\Controllers\Medical_ConsultationController;
 use App\Http\Controllers\Patient_AidController;
 use App\Http\Controllers\Medication_TimeController;
@@ -94,4 +96,10 @@ Route::get('/test-session', function () {
     session(['test_key' => 'test_value']);
     // استرجاع القيمة من الجلسة وعرضها
     return session('test_key');
+});
+
+
+Route::get('/sendtest', function () {
+    Mail::to('www.smsm.sy.com@gmail.com')->send(new TestMail());
+    return response('sending');
 });

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Patient_Aid;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class Patient_AidController extends Controller
 {
@@ -14,52 +15,52 @@ class Patient_AidController extends Controller
         return response()->json($Patient_Aid);
     }
 
-    public function Unacceptable_Patient_Aid(string $id)
+    public function Unacceptable_Patient_Aid()
     {
         // الحصول على طلبات المساعدة التي لم يتم الرد عليها
         $Patient_Aid=Patient_Aid::where('status',false)->get();
         return response()->json([
             'Patient_Aid' => $Patient_Aid,
-            'volunteer_id' => $id,
         ]);    
     }
 
-    public function Volunteer_Acceptance(string $id)
+    public function Volunteer_Acceptance()
     {
          // الحصول على إجابات المتطوع
-        $Patient_Aid=Patient_Aid::where('volunteer_id',$id)->get();
+        $volunteer_id=Auth::user()->volunteers->id;
+        $Patient_Aid=Patient_Aid::where('volunteer_id',$volunteer_id)->get();
         return response()->json([
             'Patient_Aid' => $Patient_Aid,
-            'volunteer_id' => $id,
         ]);
     }
 
-    public function store_acceptance($id,$ida)
+    public function store_acceptance($id)
     {
         // تخزين المتطوع الذي وافق على طلب المساعدة
-        $Patient_Aid = Patient_Aid::findOrFail($ida);
+        $volunteer_id=Auth::user()->volunteers->id;
+        $Patient_Aid = Patient_Aid::findOrFail($id);
         $Patient_Aid->update([
-            'volunteer_id'=>$id,
+            'volunteer_id'=>$volunteer_id,
             'status'=>1    
             ]);
             return response()->json([
                 'message' => 'volunteer stored successfully',
-                'Patient_Aid' => $Patient_Aid
+              //  'Patient_Aid' => $Patient_Aid
             ]);
     }
 
-    public function Patient_Aid($id)
+    public function Patient_Aid()
     {
         // الحصول على طلبات المساعدة للمريض
+        $patient_id=Auth::user()->patient->id;
         $Patient_Aid=Patient_Aid::with((['volunteer.user','patient.user']))
-        ->where('patient_id',$id)->get();
+        ->where('patient_id',$patient_id)->get();
         return response()->json([
             'Patient_Aid' => $Patient_Aid,
-            'patient_id' => $id,
         ]);
     }
 
-    public function Patient_Aid_store(Request $request,$id)
+    public function Patient_Aid_store(Request $request)
     {
         // تخزين طلبات المساعدة الجديدة
         $request->validate([
@@ -69,8 +70,9 @@ class Patient_AidController extends Controller
             'additional_details' => 'nullable|string',
         ]);
 
+        $patient_id=Auth::user()->patient->id;
         $Patient_Aid = Patient_Aid::create([
-            'patient_id' => $id,
+            'patient_id' => $patient_id,
             'aid_type' => $request->aid_type,
             'aid_date' => $request->aid_date,
             'location' => $request->location,

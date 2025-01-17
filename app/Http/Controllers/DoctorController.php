@@ -4,9 +4,31 @@ namespace App\Http\Controllers;
 use App\Models\Doctor;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class DoctorController extends Controller
 {
+
+
+    public function doctor_data(Request $request)
+    {
+        $user_id=Auth::user()->id;
+        $certificate_path = $request->file('certificate_photo')->store('certificate_photo', 'public');
+        $image_path = $request->file('image')->store('doctor', 'public');
+        $doctor = Doctor::create([
+            'user_id' => $user_id,
+            'specialization' => $request->specialization,
+            'certificate_photo' => $certificate_path,
+            'contact_information' => $request->contact_information,
+            'clinic_location' => $request->clinic_location,
+            'image' => $image_path,
+        ]);
+        return response()->json([
+            'message' => 'doctor data created successfully',
+            'doctor' => $doctor
+        ]);
+    }
+
     public function index()
     {
         // الحصول على قائمة الأطباء

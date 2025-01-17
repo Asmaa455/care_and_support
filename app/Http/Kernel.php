@@ -35,11 +35,11 @@ class Kernel extends HttpKernel
             \Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse::class,
             \Illuminate\Session\Middleware\StartSession::class,
             \Illuminate\View\Middleware\ShareErrorsFromSession::class,
-            \App\Http\Middleware\VerifyCsrfToken::class,
+          //  \App\Http\Middleware\VerifyCsrfToken::class,
         ],
     
         'api' => [
-            \App\Http\Middleware\VerifyCsrfTokenForApi::class,
+         //   \App\Http\Middleware\VerifyCsrfTokenForApi::class,
             'throttle:api',
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
         ],

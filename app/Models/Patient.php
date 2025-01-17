@@ -11,6 +11,10 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Patient extends Model
 {
+
+    protected $fillable = ['user_id','age', 'gender','diseases', 'paper_to_prove_cancer','image'];
+    protected $guarded=[];
+
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);

@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Doctor extends Model
 {
-    protected $fillable = ['name', 'specialization','clinic_location'];
+    protected $fillable = ['name', 'specialization','clinic_location','user_id', 'certificate_photo','contact_information','image'];
     protected $guarded=[];
 
 

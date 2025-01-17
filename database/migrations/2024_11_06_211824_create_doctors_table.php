@@ -15,9 +15,10 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id')->references('id')->on('users')->cascadeOnDelete();
             $table->string('specialization');
-            $table->text('certificate photo');
+            $table->text('certificate_photo');
             $table->integer('contact_information');
             $table->text('clinic_location');
+            $table->string('image')->nullable();
             $table->timestamps();
         });
     }
