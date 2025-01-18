@@ -18,11 +18,10 @@ return new class extends Migration
             $table->text('consultation_text');
             $table->boolean('status')->default(false);
             $table->text('answer_text')->default('null');
-            $table->string('payment_status')->default('pending'); // حالة الدفع
-            $table->string('payment_id')->nullable(); // معرف الدفع من Stripe
+            $table->boolean('health_data_sharing');
             $table->timestamps();
         });
-    }///////////       
+    }     
 
     /**
      * Reverse the migrations.

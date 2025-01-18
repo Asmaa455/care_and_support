@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Patient;
+use App\Models\Wallet;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -21,9 +22,14 @@ class PatientController extends Controller
             'paper_to_prove_cancer' => $paper_path,
             'image' => $image_path,
         ]);
+        $wallet = Wallet::create([
+            'user_id' => $user_id,
+            'current_balance' => 10,
+        ]);
         return response()->json([
             'message' => 'patient data created successfully',
-            'patient' => $patient
+            'patient' => $patient,
+            'wallet' => $wallet
         ]);
     }
 }

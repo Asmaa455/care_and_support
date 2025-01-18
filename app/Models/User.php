@@ -62,6 +62,11 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->hasOne(Patient::class);
     }
 
+    public function wallet(): HasOne
+    {
+        return $this->hasOne(Wallet::class);
+    }
+
     public function volunteers(): HasOne
     {
         return $this->hasOne(Volunteer::class);

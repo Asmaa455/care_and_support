@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 use App\Models\Doctor;
-
+use App\Models\Wallet;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -23,16 +23,21 @@ class DoctorController extends Controller
             'clinic_location' => $request->clinic_location,
             'image' => $image_path,
         ]);
+        $wallet = Wallet::create([
+            'user_id' => $user_id,
+            'current_balance' => 10,
+        ]);
         return response()->json([
             'message' => 'doctor data created successfully',
-            'doctor' => $doctor
+            'doctor' => $doctor,
+            'wallet' => $wallet
         ]);
     }
 
     public function index()
     {
         // الحصول على قائمة الأطباء
-        $Doctor=Doctor::get();
+        $Doctor=Doctor::with('user')->get();
         return response()->json($Doctor);
     }
 

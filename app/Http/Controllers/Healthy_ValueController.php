@@ -4,18 +4,21 @@ namespace App\Http\Controllers;
 
 use App\Models\Healthy_Value;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class Healthy_ValueController extends Controller
 {
-    public function store_value(Request $request,$id,$idd)
+    public function store_value(Request $request,$id)
     {
         // تخزين قيمة جديدة
         /*$request->validate([
             'value' => 'required|numeric',
         ]);*/
+
+        $patient_id=Auth::user()->patient->id;
         $Healthy_Value = Healthy_Value::create([
-            'patient_id' => $id,
-            'disease_id' => $idd,
+            'patient_id' => $patient_id,
+            'disease_id' => $id,
             'value' => $request->value,
             'valuee' => $request->valuee,
             'status' => $request->status,
@@ -26,11 +29,13 @@ class Healthy_ValueController extends Controller
         ]);    
     }
 
-    public function show_value($id,$idd)
+    public function show_value($id)
     {
         // الحصول على البيانات الصحية لمرض معين الخاصة بمريض معين
-        $Healthy_Value=Healthy_Value::where('patient_id',$id)
-        ->where('disease_id', $idd)->get();
+
+        $patient_id=Auth::user()->patient->id;
+        $Healthy_Value=Healthy_Value::where('patient_id',$patient_id)
+        ->where('disease_id', $id)->get();
         return response()->json($Healthy_Value); 
     }
 

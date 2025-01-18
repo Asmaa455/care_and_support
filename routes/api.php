@@ -75,8 +75,10 @@ Route::controller(Medication_TimeController::class)->group(function () {
 
 Route::controller(Healthy_ValueController::class)->group(function () {
 
-    Route::Post('Healthy_Value/store_value/{id}/{idd}','store_value');
-    Route::get('Healthy_Value/show_value/{id}/{idd}','show_value');
+    Route::Post('Healthy_Value/store_value/{id}','store_value')
+    ->middleware('auth:sanctum');
+    Route::get('Healthy_Value/show_value/{id}','show_value')
+    ->middleware('auth:sanctum');
     Route::get('Healthy_Value/delete_value/{id}','delete_value');
     
 });
@@ -86,7 +88,8 @@ Route::controller(DoctorController::class)->group(function () {
     Route::get('Doctors_Directory/index','index');
     Route::get('Doctors_Directory/search','search');
 
-    Route::Post('doctor_data','doctor_data')->middleware('auth:sanctum');
+    Route::Post('doctor_data','doctor_data')
+    ->middleware('auth:sanctum');
 });
 
 Route::controller(Awareness_PostController::class)->group(function () {
