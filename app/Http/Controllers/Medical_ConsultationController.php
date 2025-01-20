@@ -31,11 +31,6 @@ class Medical_ConsultationController extends Controller
         // الحصول على الاستشارات الطبية التي لم يتم الرد عليها
         $Medical_Consultation=Medical_Consultation::where('status',false)
         ->orderBy('created_at', 'desc')->get();
-        /*if($Medical_Consultation->health_data_sharing)
-        {
-            $patient_id = $Medical_Consultation->patient_id;
-            return response()->json($Medical_Consultation,200);
-        }*/
         return response()->json([
             'consultations' => $Medical_Consultation,
         ]);
@@ -63,6 +58,8 @@ class Medical_ConsultationController extends Controller
 
 
         $doctor_id=Auth::user()->doctor->id;
+        $user_id = Auth::user()->doctor->user->id;
+
         $Medical_Consultation = Medical_Consultation::findOrFail($id);
 
         $amount = 5;
@@ -79,8 +76,9 @@ class Medical_ConsultationController extends Controller
 
         if($charge && $charge->status == 'succeeded')
         {
-            $doctor = Doctor::find($Medical_Consultation->doctor_id);
-            $doctorWallet = Wallet::where('user_id', $doctor->user_id)->first();
+
+            $doctorWallet = Wallet::where('user_id', $user_id)->first();
+                        
             $doctorWallet->current_balance += $amount;
             $doctorWallet->save();
 

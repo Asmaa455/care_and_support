@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 use App\Models\Doctor;
+use App\Models\User;
 use App\Models\Wallet;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+
 
 class DoctorController extends Controller
 {
@@ -14,7 +16,7 @@ class DoctorController extends Controller
     {
         $user_id=Auth::user()->id;
         $certificate_path = $request->file('certificate_photo')->store('certificate_photo', 'public');
-        $image_path = $request->file('image')->store('doctor', 'public');
+        $image_path = $request->file('image') ? $request->file('image')->store('doctor', 'public') : null;
         $doctor = Doctor::create([
             'user_id' => $user_id,
             'specialization' => $request->specialization,
@@ -32,6 +34,41 @@ class DoctorController extends Controller
             'doctor' => $doctor,
             'wallet' => $wallet
         ]);
+    }
+
+    public function view_doctor_data()
+    {
+        // الحصول على بيانات الطبيب للبروفايل
+        $user_id=Auth::user()->id;
+        $doctor=Doctor::where('user_id',$user_id)->with('user')->get();
+        $wallet = Wallet::where('user_id',$user_id)->get();
+        return response()->json([
+            'doctor' => $doctor,
+            'wallet' => $wallet,
+        ]);
+
+    }
+
+    public function update_doctor_data(Request $request)
+    {
+        $user_id=Auth::user()->id;
+        $doctor = Doctor::where('user_id', $user_id)->firstOrFail();
+        if ($request->hasFile('image')) {
+            $image_path = $request->file('image')->store('doctor', 'public');
+            $doctor->image = $image_path;
+        }
+        $doctor->update($request->only(['specialization', 'contact_information', 'clinic_location']));
+
+        $user = User::findOrFail($user_id);
+        $user_data = $request->only(['first_name', 'second_name']);
+        $user->update($user_data);
+
+        return response()->json([
+            'message' => 'Doctor and user data updated successfully',
+            'doctor' => $doctor,
+            'user' => $user,
+        ]);
+        
     }
 
     public function index()

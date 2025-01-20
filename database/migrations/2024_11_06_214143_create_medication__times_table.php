@@ -16,11 +16,10 @@ return new class extends Migration
             $table->foreignId('patient_id')->references('id')->on('patients');
             $table->string('medication_name');
             $table->string('amount');
-            $table->time('time_of_taking_the_drug');
-            $table->integer('daily_repetition');
             $table->date('start_date');
-            $table->integer('duration_of_taking_the_drug');
-            $table->integer('status')->default(0);
+            $table->integer('times_per_day');
+            $table->time('first_dose_time');
+            $table->integer('duration_days');
             $table->timestamps();
         });
     }

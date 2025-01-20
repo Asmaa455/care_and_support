@@ -103,3 +103,7 @@ Route::get('/sendtest', function () {
     Mail::to('www.smsm.sy.com@gmail.com')->send(new TestMail());
     return response('sending');
 });
+
+Route::get('/stripe-test', function () {
+    return view('stripe-test');
+});

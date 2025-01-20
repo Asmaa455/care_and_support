@@ -27,11 +27,15 @@ Route::controller(UserController::class)->group(function () {
 Route::controller(VolunteerController::class)->group(function () {
 
     Route::Post('volunteer_data','volunteer_data')->middleware('auth:sanctum');
+    Route::get('view_volunteer_data','view_volunteer_data')->middleware('auth:sanctum');
+    Route::Post('update_volunteer_data','update_volunteer_data')->middleware('auth:sanctum');
 });
 
 Route::controller(PatientController::class)->group(function () {
 
     Route::Post('patient_data','patient_data')->middleware('auth:sanctum');
+    Route::get('view_patient_data','view_patient_data')->middleware('auth:sanctum');
+    Route::Post('update_patient_data','update_patient_data')->middleware('auth:sanctum');
 });
 
 Route::controller(Medical_ConsultationController::class)->group(function () {
@@ -66,9 +70,12 @@ Route::controller(Patient_AidController::class)->group(function () {
 
 Route::controller(Medication_TimeController::class)->group(function () {
 
-    Route::Post('Medication_Time/store/{id}','store');
-    Route::get('Medication_Time/show/{id}','show');
-    Route::get('Medication_Time/status/{id}','status');
+    Route::Post('Medication_Time/store','store')
+    ->middleware('auth:sanctum');
+    Route::get('Medication_Time/show','show')
+    ->middleware('auth:sanctum');
+    Route::Post('Medication_Time/status/{id}','status');
+    Route::get('Medication_Time/destroy/{id}','destroy');
 
 });
 
@@ -89,6 +96,12 @@ Route::controller(DoctorController::class)->group(function () {
     Route::get('Doctors_Directory/search','search');
 
     Route::Post('doctor_data','doctor_data')
+    ->middleware('auth:sanctum');
+
+    Route::get('view_doctor_data','view_doctor_data')
+    ->middleware('auth:sanctum');
+
+    Route::Post('update_doctor_data','update_doctor_data')
     ->middleware('auth:sanctum');
 });
 

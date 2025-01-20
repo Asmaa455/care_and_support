@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Patient;
 use App\Models\Patient_Aid;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -71,6 +72,11 @@ class Patient_AidController extends Controller
         ]);
 
         $patient_id=Auth::user()->patient->id;
+        $patient = Patient::find($patient_id);
+        if (is_null($patient->paper_to_prove_cancer)) {
+            return response()->json([ 'message' => 'Request cannot be accepted without paper to prove cancer' ],
+            400); 
+        }
         $Patient_Aid = Patient_Aid::create([
             'patient_id' => $patient_id,
             'aid_type' => $request->aid_type,

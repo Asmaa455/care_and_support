@@ -18,7 +18,6 @@ return new class extends Migration
             $table->text('consultation_text');
             $table->boolean('status')->default(false);
             $table->text('answer_text')->default('null');
-            $table->boolean('health_data_sharing');
             $table->timestamps();
         });
     }     
