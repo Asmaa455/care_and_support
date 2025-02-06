@@ -24,6 +24,7 @@ class UserController extends Controller
             'second_name' => $request->second_name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
+            'type' => $request->type,
         ]);
 
         return response()->json([
@@ -47,6 +48,17 @@ class UserController extends Controller
             'token' => $token
         ],201);
     }
+
+    public function storeFirebaseToken(Request $request)
+{
+    $user_id=Auth::user()->id;
+    $user = User::findOrFail($user_id);
+    $user->firebase_token = $request->firebase_token;
+    $user->save();
+
+    return response()->json(['message' => 'Firebase token stored successfully']);
+}
+
 
     public function logout(Request $request)
     {

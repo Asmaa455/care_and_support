@@ -11,22 +11,25 @@ class Healthy_ValueController extends Controller
     public function store_value(Request $request,$id)
     {
         // تخزين قيمة جديدة
-        /*$request->validate([
-            'value' => 'required|numeric',
-        ]);*/
+        $request->validate([
+            'value' => 'required|integer',
+            'valuee' => 'nullable|integer',
+            'status' => 'nullable|string',
+        ]);
+
 
         $patient_id=Auth::user()->patient->id;
         $Healthy_Value = Healthy_Value::create([
             'patient_id' => $patient_id,
             'disease_id' => $id,
             'value' => $request->value,
-            'valuee' => $request->valuee,
+            'valuee' => $request->valuee, 
             'status' => $request->status,
         ]);
         return response()->json([
             'message' => 'healthy value stored successfully',
             'Healthy_Value' => $Healthy_Value
-        ]);    
+        ]);
     }
 
     public function show_value($id)

@@ -10,17 +10,16 @@ use Illuminate\Support\Facades\Auth;
 
 class PatientController extends Controller
 {
-    public function patient_data(Request $request)
+    public function patient_data(Request $request,$id)
     {
 
-        $request->validate([
+      /*  $request->validate([
             'paper_to_prove_cancer' => 'nullable|string',
-        ]);
-        $user_id=Auth::user()->id;
+        ]);*/
         $paper_path = $request->file('paper_to_prove_cancer') ? $request->file('paper_to_prove_cancer')->store('paper_to_prove_cancer', 'public') : null;
         $image_path = $request->file('image') ? $request->file('image')->store('patient', 'public') : null;
         $patient = Patient::create([
-            'user_id' => $user_id,
+            'user_id' => $id,
             'age' => $request->age,
             'gender' => $request->gender,
             'diseases' => $request->diseases,
@@ -28,7 +27,7 @@ class PatientController extends Controller
             'image' => $image_path,
         ]);
         $wallet = Wallet::create([
-            'user_id' => $user_id,
+            'user_id' => $id,
             'current_balance' => 10,
         ]);
         return response()->json([

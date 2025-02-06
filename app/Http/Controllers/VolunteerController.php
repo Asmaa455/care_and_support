@@ -9,11 +9,11 @@ use Illuminate\Support\Facades\Auth;
 
 class VolunteerController extends Controller
 {
-    public function volunteer_data(Request $request)
+    public function volunteer_data(Request $request,$id)
     {
-        $user_id=Auth::user()->id;
-        $image_path = $request->file('image') ? $request->file('image')->store('volunteer', 'public') : null;        $volunteer = Volunteer::create([
-            'user_id' => $user_id,
+        $image_path = $request->file('image') ? $request->file('image')->store('volunteer', 'public') : null;
+        $volunteer = Volunteer::create([
+            'user_id' => $id,
             'national_number' => $request->national_number,
             'contact_information' => $request->contact_information,
             'image' => $image_path,

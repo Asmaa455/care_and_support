@@ -20,20 +20,21 @@ Route::controller(UserController::class)->group(function () {
 //->middleware('verified')
     Route::Post('register','register');
     Route::Post('login','login');
+    Route::Post('storeFirebaseToken','storeFirebaseToken')->middleware('auth:sanctum');
     Route::get('logout','logout')->middleware('auth:sanctum');
 
 });
 
 Route::controller(VolunteerController::class)->group(function () {
 
-    Route::Post('volunteer_data','volunteer_data')->middleware('auth:sanctum');
+    Route::Post('volunteer_data/{id}','volunteer_data');
     Route::get('view_volunteer_data','view_volunteer_data')->middleware('auth:sanctum');
     Route::Post('update_volunteer_data','update_volunteer_data')->middleware('auth:sanctum');
 });
 
 Route::controller(PatientController::class)->group(function () {
 
-    Route::Post('patient_data','patient_data')->middleware('auth:sanctum');
+    Route::Post('patient_data/{id}','patient_data');
     Route::get('view_patient_data','view_patient_data')->middleware('auth:sanctum');
     Route::Post('update_patient_data','update_patient_data')->middleware('auth:sanctum');
 });
@@ -65,6 +66,9 @@ Route::controller(Patient_AidController::class)->group(function () {
     ->middleware('auth:sanctum');
     Route::Post('Patient_Aid/Patient_Aid_store','Patient_Aid_store')
     ->middleware('auth:sanctum');
+    
+    Route::get('Aid_Statistics','Aid_Statistics');
+    Route::Post('Monthly_Reports','Monthly_Reports');
 });
 
 
@@ -73,6 +77,8 @@ Route::controller(Medication_TimeController::class)->group(function () {
     Route::Post('Medication_Time/store','store')
     ->middleware('auth:sanctum');
     Route::get('Medication_Time/show','show')
+    ->middleware('auth:sanctum');
+    Route::get('Medication_Time/show_medicine/{id}','show_medicine')
     ->middleware('auth:sanctum');
     Route::Post('Medication_Time/status/{id}','status');
     Route::get('Medication_Time/destroy/{id}','destroy');
@@ -94,9 +100,7 @@ Route::controller(DoctorController::class)->group(function () {
 
     Route::get('Doctors_Directory/index','index');
     Route::get('Doctors_Directory/search','search');
-
-    Route::Post('doctor_data','doctor_data')
-    ->middleware('auth:sanctum');
+    Route::Post('doctor_data/{id}','doctor_data');
 
     Route::get('view_doctor_data','view_doctor_data')
     ->middleware('auth:sanctum');

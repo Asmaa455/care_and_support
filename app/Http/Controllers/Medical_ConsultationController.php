@@ -12,15 +12,27 @@ use StripeStripe;
 use StripePaymentIntent;
 use Stripe\Stripe;
 use Stripe\Charge;
+use App\Services\FirebaseNotificationService;
 
 
 class Medical_ConsultationController extends Controller
 {
     
+
+    /*protected $notificationService;
+
+    // التابع المنشئ لتضمين خدمة الإشعارات
+    public function __construct(FirebaseNotificationService $notificationService)
+    {
+        $this->notificationService = $notificationService;
+    }*/
+
+    
     public function Answered_Medical_Consultation()
     {
         // الحصول على الاستشارات الطبية التي تم الرد عليها
-        $Medical_Consultation=Medical_Consultation::where('status',true)
+        $Medical_Consultation=Medical_Consultation::with((['doctor.user','patient.user']))
+        ->where('status',true)
         ->orderBy('created_at', 'desc')->get();
         return response()->json($Medical_Consultation,200);
     }
@@ -29,7 +41,8 @@ class Medical_ConsultationController extends Controller
     public function Unanswered_Medical_Consultations()
     {
         // الحصول على الاستشارات الطبية التي لم يتم الرد عليها
-        $Medical_Consultation=Medical_Consultation::where('status',false)
+        $Medical_Consultation=Medical_Consultation::with((['patient.user']))
+        ->where('status',false)
         ->orderBy('created_at', 'desc')->get();
         return response()->json([
             'consultations' => $Medical_Consultation,
@@ -41,7 +54,8 @@ class Medical_ConsultationController extends Controller
     {
          // الحصول على إجابات الطبيب
         $doctor_id=Auth::user()->doctor->id;
-        $Medical_Consultation=Medical_Consultation::where('doctor_id',$doctor_id)
+        $Medical_Consultation=Medical_Consultation::with((['doctor.user','patient.user']))
+        ->where('doctor_id',$doctor_id)
         ->orderBy('created_at', 'desc')->get();
         return response()->json([
             'consultations' => $Medical_Consultation,
@@ -63,7 +77,7 @@ class Medical_ConsultationController extends Controller
         $Medical_Consultation = Medical_Consultation::findOrFail($id);
 
         $amount = 5;
-        $token = $request->input('stripeToken');
+        /*$token = $request->input('stripeToken');
 
         Stripe::setApiKey(env('STRIPE_SECRET'));
 
@@ -104,6 +118,24 @@ class Medical_ConsultationController extends Controller
                 'status'=>1,
                 ]);
 
+            
+            // إرسال إشعار للمريض
+            //$patientToken = $Medical_Consultation->patient->user->firebase_token;
+            //$this->notificationService->sendNotification(
+            //    $patientToken,
+            //    'تم الرد على استشارتك',
+            //    'لقد قام الطبيب بالرد على استشارتك.'
+            //);
+
+            // إرسال إشعار للطبيب
+            //$doctorToken = Auth::user()->firebase_token;
+            //$this->notificationService->sendNotification(
+            //    $doctorToken,
+            //    'تم إضافة رصيد',
+            //    'تم إضافة رصيد إلى حسابك بعد الرد على الاستشارة.'
+            //);
+
+
             return response()->json([
                 'message' => 'Answer stored successfully',
                 'consultation' => $Medical_Consultation,
@@ -111,7 +143,7 @@ class Medical_ConsultationController extends Controller
         }
 
         else
-        {
+        {*/
             $patientWallet = Wallet::where('user_id', $Medical_Consultation->patient_id)->first();
             if ($patientWallet && $patientWallet->current_balance >= $amount)
             {
@@ -140,19 +172,37 @@ class Medical_ConsultationController extends Controller
                     'answer_text'=>$request->answer_text,
                     'status'=>1,
                     ]);
+
+                
+               /* // إرسال إشعار للمريض
+                $patientToken = $Medical_Consultation->patient->user->firebase_token;
+                $this->notificationService->sendNotification(
+                    $patientToken,
+                    'تم الرد على استشارتك',
+                    'لقد قام الطبيب بالرد على استشارتك.'
+                );
+
+                // إرسال إشعار للطبيب
+                $doctorToken = Auth::user()->firebase_token;
+                $this->notificationService->sendNotification(
+                    $doctorToken,
+                    'تم إضافة رصيد',
+                    'تم إضافة رصيد إلى حسابك بعد الرد على الاستشارة.'
+                );*/
+
     
                 return response()->json([
                     'message' => 'Answer stored successfully',
                     'consultation' => $Medical_Consultation,
                 ]);
-            }
+            //}
 
-            else
+            /*else
             {
                 return response()->json([
                     'message' => 'Failed to process payment from Stripe and wallet.',
                 ], 500);
-            }
+            }*/
 
         }
 
@@ -184,9 +234,24 @@ class Medical_ConsultationController extends Controller
             'patient_id' => $patient_id,
             'consultation_text' => $request->consultation_text,
         ]);
+
+        /*  $doctors = Doctor::all();
+
+        foreach ($doctors as $doctor) {
+            $token = $doctor->user->firebase_token; // تأكد من أن كل مريض لديه توكن Firebase
+          //  $token = $doctor->user->firebase_token ?? 'fake_firebase_token';
+            $this->notificationService->sendNotification(
+                $token,
+                'طلب استشارة جديد',
+                'هناك استشارة جديدة من المريض ' . Auth::user()->name,
+                ['consultation_id' => $medical_consultation->id]
+            );
+        }*/
+
         return response()->json([
             'message' => 'Medical consultation created successfully',
-            'consultation' => $medical_consultation
+            'consultation' => $medical_consultation,
+            'consultation_id' => $medical_consultation->id
         ]);
 
     }

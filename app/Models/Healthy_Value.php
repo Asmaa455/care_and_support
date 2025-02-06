@@ -8,7 +8,11 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class Healthy_Value extends Model
 {
 
-    protected $fillable = ['patient_id', 'disease_id','value','value2'];
+    protected $fillable = ['patient_id', 'disease_id','value','valuee','status'];
+    protected $attributes = [
+        'valuee' => 0,
+        'status' => 'default_value',
+    ];
     protected $guarded=[];
     public function patient(): BelongsTo
     {

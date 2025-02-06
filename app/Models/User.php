@@ -10,6 +10,7 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Laravel\Sanctum\HasApiTokens;
 
+
 class User extends Authenticatable implements MustVerifyEmail
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
@@ -25,6 +26,8 @@ class User extends Authenticatable implements MustVerifyEmail
         'second_name',
         'email',
         'password',
+        'type',
+        'firebase_token',
     ];
     
 

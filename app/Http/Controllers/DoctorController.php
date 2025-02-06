@@ -12,13 +12,12 @@ class DoctorController extends Controller
 {
 
 
-    public function doctor_data(Request $request)
+    public function doctor_data(Request $request,$id)
     {
-        $user_id=Auth::user()->id;
         $certificate_path = $request->file('certificate_photo')->store('certificate_photo', 'public');
         $image_path = $request->file('image') ? $request->file('image')->store('doctor', 'public') : null;
         $doctor = Doctor::create([
-            'user_id' => $user_id,
+            'user_id' => $id,
             'specialization' => $request->specialization,
             'certificate_photo' => $certificate_path,
             'contact_information' => $request->contact_information,
@@ -26,7 +25,7 @@ class DoctorController extends Controller
             'image' => $image_path,
         ]);
         $wallet = Wallet::create([
-            'user_id' => $user_id,
+            'user_id' => $id,
             'current_balance' => 10,
         ]);
         return response()->json([

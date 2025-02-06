@@ -3,23 +3,37 @@
 namespace App\Http\Controllers;
 
 use App\Models\Patient;
+use App\Models\Volunteer;
 use App\Models\Patient_Aid;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use App\Services\FirebaseNotificationService;
 
 class Patient_AidController extends Controller
 {
+
+    /* protected $notificationService;
+
+    // التابع المنشئ لتضمين خدمة الإشعارات
+    public function __construct(FirebaseNotificationService $notificationService)
+    {
+        $this->notificationService = $notificationService;
+    }*/
+
     public function Acceptable_Patient_Aid()
     {
         // الحصول على طلبات المساعدة التي تم الرد عليها
-        $Patient_Aid=Patient_Aid::where('status',true)->get();
+        $Patient_Aid=Patient_Aid::with((['volunteer.user','patient.user']))
+        ->where('status',true)->get();
         return response()->json($Patient_Aid);
     }
 
     public function Unacceptable_Patient_Aid()
     {
         // الحصول على طلبات المساعدة التي لم يتم الرد عليها
-        $Patient_Aid=Patient_Aid::where('status',false)->get();
+        $Patient_Aid=Patient_Aid::with((['patient.user']))->
+        where('status',false)->get();
         return response()->json([
             'Patient_Aid' => $Patient_Aid,
         ]);    
@@ -29,7 +43,8 @@ class Patient_AidController extends Controller
     {
          // الحصول على إجابات المتطوع
         $volunteer_id=Auth::user()->volunteers->id;
-        $Patient_Aid=Patient_Aid::where('volunteer_id',$volunteer_id)->get();
+        $Patient_Aid=Patient_Aid::with((['patient.user']))->
+        where('volunteer_id',$volunteer_id)->get();
         return response()->json([
             'Patient_Aid' => $Patient_Aid,
         ]);
@@ -44,10 +59,18 @@ class Patient_AidController extends Controller
             'volunteer_id'=>$volunteer_id,
             'status'=>1    
             ]);
-            return response()->json([
-                'message' => 'volunteer stored successfully',
-              //  'Patient_Aid' => $Patient_Aid
-            ]);
+
+            
+        /*$patientToken = $Patient_Aid->patient->user->firebase_token;
+        $this->notificationService->sendNotification(
+            $patientToken,
+            'تم قبول طلب مساعدتك',
+            'لقد وافق متطوع على طلب مساعدتك.'
+        );*/
+
+        return response()->json([
+            'message' => 'volunteer stored successfully',
+        ]);
     }
 
     public function Patient_Aid()
@@ -84,9 +107,68 @@ class Patient_AidController extends Controller
             'location' => $request->location,
             'additional_details' => $request->additional_details,
         ]);
+
+        /* // إرسال إشعار لكل المتطوعين
+        $volunteers = Volunteer::all();
+        foreach ($volunteers as $volunteer) {
+            $token = $volunteer->user->firebase_token;
+            $this->notificationService->sendNotification(
+                $token,
+                'طلب مساعدة جديد',
+                'هناك طلب مساعدة جديد من المريض ' . Auth::user()->name,
+                ['aid_id' => $Patient_Aid->id]
+            );
+        }*/
+
         return response()->json([
             'message' => 'Ask for help created successfully',
             'Patient_Aid' => $Patient_Aid
+        ]);
+    }
+
+    public function Aid_Statistics()
+    {
+        // إحصاءات المساعدة
+        $totalRequests = Patient_Aid::count();
+        $acceptedRequests = Patient_Aid::where('status', true)->count();
+        $popularAidTypes = Patient_Aid::select('aid_type',DB::raw('count(*) as total'))
+            ->groupBy('aid_type')
+            ->orderBy('total', 'desc')
+            ->get();
+            
+        return response()->json([
+            'total_requests' => $totalRequests,
+            'accepted_requests' => $acceptedRequests,
+            'popular_aid_types' => $popularAidTypes,
+        ]);
+    }
+
+    public function Monthly_Reports(Request $request)
+    {
+        // التحقق من صحة البيانات المدخلة
+        $request->validate([
+            'month' => 'required|integer',
+            'year' => 'required|integer'
+        ]);
+
+        $month = $request->input('month');
+        $year = $request->input('year');
+
+        // جلب التقرير الشهري بناءً على الشهر والسنة المدخلين
+        $totalRequests = Patient_Aid::whereYear('created_at', $year)
+            ->whereMonth('created_at', $month)
+            ->count();
+
+        $acceptedRequests = Patient_Aid::whereYear('created_at', $year)
+            ->whereMonth('created_at', $month)
+            ->where('status', true)
+            ->count();
+
+        return response()->json([
+            'month' => $month,
+            'year' => $year,
+            'total_requests' => $totalRequests,
+            'accepted_requests' => $acceptedRequests,
         ]);
     }
 }
